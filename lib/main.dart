@@ -79,16 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
         // Background color
       ),
     );
-    var button_Confirm = new ElevatedButton(
-      // ignore: prefer_const_constructors
-      child: Text('Enregistrer'),
-
-      onPressed: () async {},
-      style: ElevatedButton.styleFrom(
-        primary: Colors.green,
-        // Background color
-      ),
-    );
 
     // ignore: non_constant_identifier_names
 
@@ -102,12 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: new Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          button_Societe,
-          button_Type,
-          button_Scan,
-          button_Confirm
-        ],
+        children: <Widget>[button_Societe, button_Type, button_Scan],
       ),
     );
   }
