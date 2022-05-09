@@ -1,9 +1,31 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 // first import the packge
 import 'package:card_numbers_form_camera/card_numbers_form_camera.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:scan_number_cadorim/screens/homeScreen.dart';
+import 'package:scan_number_cadorim/screens/loginScreen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
+  configLoading();
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.custom
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.white
+    ..backgroundColor = Color(0xFF006AB3)
+    ..indicatorColor = Colors.white
+    ..textColor = Colors.white
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false;
 }
 
 class MyApp extends StatelessWidget {
@@ -13,195 +35,48 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Ac',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Ac'),
+      debugShowCheckedModeBanner: false,
+      builder: EasyLoading.init(),
+      home: CheckAuth(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
+class CheckAuth extends StatefulWidget {
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _CheckAuthState createState() => _CheckAuthState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String text = '';
-  String Societe = '';
-  String Type = '';
+class _CheckAuthState extends State<CheckAuth> {
+  bool isAuth = false;
+
   @override
   void initState() {
+    _checkIfLoggedIn();
+
     super.initState();
+  }
+
+  _checkIfLoggedIn() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    if (localStorage.getString('token') != null) {
+      setState(() {
+        isAuth = true;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    ///Button
-    // ignore: non_constant_identifier_names, duplicate_ignore
-    var button_Scan = new ElevatedButton(
-      // ignore: prefer_const_constructors
-      child: Text('Scan'),
-      onPressed: () async {
-        String s = await getCardNumbers(context);
-        setState(() {
-          text = s;
-          print("######################### cart number : " + text);
-        });
-      },
+    Widget child;
+    if (isAuth) {
+      child = const HomeScreen();
+    } else {
+      child = LoginScreen();
+    }
+
+    return Scaffold(
+      body: child,
     );
-    var button_Societe = new ElevatedButton(
-      // ignore: prefer_const_constructors
-      child: Text('Mauritel'),
-
-      onPressed: () async {
-        _bottomDeSociete(context);
-      },
-      style: ElevatedButton.styleFrom(
-        primary: Colors.blue,
-        // Background color
-      ),
-    );
-    var button_Type = new ElevatedButton(
-      // ignore: prefer_const_constructors
-      child: Text('10'),
-
-      onPressed: () async {
-        _bottomDeCart(context);
-      },
-      style: ElevatedButton.styleFrom(
-        primary: Colors.blue,
-        // Background color
-      ),
-    );
-
-    // ignore: non_constant_identifier_names
-
-    // ignore: non_constant_identifier_names
-
-    // ignore: non_constant_identifier_names
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text(widget.title),
-      ),
-      body: new Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[button_Societe, button_Type, button_Scan],
-      ),
-    );
-  }
-
-  _bottomDeSociete(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext c) {
-          return Wrap(children: <Widget>[
-            // ignore: avoid_unnecessary_containers
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(""),
-                  ),
-                  ListTile(
-                    title: Text("Mauritel"),
-                    onTap: () {
-                      setState(() {});
-                    },
-                  ),
-                  ListTile(
-                    title: Text("Mattel"),
-                    onTap: () {
-                      setState(() {});
-                    },
-                  ),
-                  ListTile(
-                    title: Text("Chenguitel"),
-                    onTap: () {
-                      setState(() {});
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ]);
-        });
-  }
-
-  _bottomDeCart(context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext c) {
-          return Wrap(children: <Widget>[
-            // ignore: avoid_unnecessary_containers
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(""),
-                  ),
-                  ListTile(
-                    title: Text("10"),
-                    onTap: () {
-                      setState(() {});
-                    },
-                  ),
-                  ListTile(
-                    title: Text("20"),
-                    onTap: () {
-                      setState(() {});
-                    },
-                  ),
-                  ListTile(
-                    title: Text("30"),
-                    onTap: () {
-                      setState(() {});
-                    },
-                  ),
-                  ListTile(
-                    title: Text("50"),
-                    onTap: () {
-                      setState(() {});
-                    },
-                  ),
-                  ListTile(
-                    title: Text("100"),
-                    onTap: () {
-                      setState(() {});
-                    },
-                  ),
-                  ListTile(
-                    title: Text("200"),
-                    onTap: () {
-                      setState(() {});
-                    },
-                  ),
-                  ListTile(
-                    title: Text("300"),
-                    onTap: () {
-                      setState(() {});
-                    },
-                  ),
-                  ListTile(
-                    title: Text("500"),
-                    onTap: () {
-                      setState(() {});
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ]);
-        });
   }
 }
