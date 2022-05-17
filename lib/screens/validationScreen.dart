@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -125,50 +126,59 @@ class _ValidationScreenState extends State<ValidationScreen> {
   }
 
   void _add() async {
-    setState(() {
-      _isLoading = true;
-    });
-    var data = {
-      'operateur': widget.operateur,
-      'montant': widget.montant,
-      'code': widget.code,
-      'password': password,
-    };
-    try {
-      timer = Timer(const Duration(milliseconds: 60000), () async {
-        await EasyLoading.dismiss();
-      });
-      await EasyLoading.show(
-        status: "Veuillez patienter",
-        maskType: EasyLoadingMaskType.black,
-      );
-      var res = await Network().authDataTok(data, 'add/card');
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var path = jsonDecode(localStorage.getString('path') ?? "");
+    var name = jsonDecode(localStorage.getString('name') ?? "");
 
-      var body = json.decode(res.body);
-      // ignore: avoid_print
-      print(body);
-      if (body['success']) {
-        await EasyLoading.dismiss();
+    print(
+        "########################################################## Name :$name ##############################################################");
+    print(
+        "########################################################## path :$path ##############################################################");
 
-        _topBar("La carte a ete ajoute", Colors.green, Icons.done);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
-      } else {
-        await EasyLoading.dismiss();
+    // setState(() {
+    //   _isLoading = true;
+    // });
+    // var data = {
+    //   'operateur': widget.operateur,
+    //   'montant': widget.montant,
+    //   'code': widget.code,
+    //   'password': password,
+    // };
+    // try {
+    //   timer = Timer(const Duration(milliseconds: 60000), () async {
+    //     await EasyLoading.dismiss();
+    //   });
+    //   await EasyLoading.show(
+    //     status: "Veuillez patienter",
+    //     maskType: EasyLoadingMaskType.black,
+    //   );
+    //   var res = await Network().authDataTok(data, 'add/card');
 
-        _topBar(body['msg'], Colors.red, Icons.error);
-      }
-    } catch (e) {
-      await EasyLoading.dismiss();
+    //   var body = json.decode(res.body);
+    //   // ignore: avoid_print
+    //   print(body);
+    //   if (body['success']) {
+    //     await EasyLoading.dismiss();
 
-      _topBar("Erreur technique", Colors.red, Icons.dangerous_sharp);
-    }
+    //     _topBar("La carte a ete ajoute", Colors.green, Icons.done);
+    //     Navigator.pushReplacement(
+    //       context,
+    //       MaterialPageRoute(builder: (context) => const HomeScreen()),
+    //     );
+    //   } else {
+    //     await EasyLoading.dismiss();
 
-    setState(() {
-      _isLoading = false;
-    });
+    //     _topBar(body['msg'], Colors.red, Icons.error);
+    //   }
+    // } catch (e) {
+    //   await EasyLoading.dismiss();
+
+    //   _topBar("Erreur technique", Colors.red, Icons.dangerous_sharp);
+    // }
+
+    // setState(() {
+    //   _isLoading = false;
+    // });
   }
 
   Future<String?> _passAlert() async {

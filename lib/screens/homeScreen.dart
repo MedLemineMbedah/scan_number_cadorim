@@ -86,7 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         '50',
                         '100',
                         '200',
-                        '500'
+                        '500',
+                        '1000'
                       ],
                       // ignore: deprecated_member_use
 

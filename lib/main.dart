@@ -48,7 +48,7 @@ class CheckAuth extends StatefulWidget {
 }
 
 class _CheckAuthState extends State<CheckAuth> {
-  bool isAuth = false;
+  bool isAuth = true;
 
   @override
   void initState() {
